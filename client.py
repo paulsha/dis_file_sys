@@ -8,7 +8,8 @@ def main():
 #read user input for username, password
 	user_ID = input("Username: ")
     user_PW = input("Password: ")
-	
+	sec_url = 'http://127.0.0.1:5001/'
++   dir_url = 'http://127.0.0.1:5002/'
 #invoke base64 encoding so not raw text	
 	encryption_ID = base64.urlsafe_b64encode(sec_serv.encrypt(user_ID, user_PW).encode()).decode()
 	JSON_auth_init = {'user_ID': user_ID, 'password': user_PW, 'encrypted_id': encrpytion_ID, 'server_ID': 'Directory'}
