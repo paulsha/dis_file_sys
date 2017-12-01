@@ -1,23 +1,42 @@
 from flask_api import FlaskAPI
 import requests
 import SecurityService as sec_serv
-
 app = FlaskAPI(__name__)
+fs_url = 'http://127.0.0.1:'
 
+#series of functions to read,write,and get directory for dir_service
 
-file_server_url = 'http://127.0.0.1:'
-
-
-@app.route('/read/<filename>', methods=['GET'])
+@app.route('/write', methods=['POST'])
+def wf(filename):
+    for n in [7, 8]:
+        server_url = fs_url+str(n)+"/"+"write/"+filename
+        in_directory = requests.post(server_url)
+        print(in_directory.text)
+        status_code = in_directory.status_code
+        if status_code == 200:
+            return in_directory.json()
+    return {'Error:': 'no file found'}
+	
+@app.route('/get_dir/<filename>', methods=['GET'])
 def get_dir(filename):
-    in_directory = requests.get(file_server_url+"5007/"+"read/"+filename)
+    in_directory = requests.get(fs_url+"5007/"+"read/"+filename)
     print(in_directory.text)
     status_code = in_directory.status_code
     if status_code == 200:
         return in_directory.json()
     else:
-        return {'Error:': 'File does not exist amongst servers.'}
+        return {'Error:': 'no file found.'}
 
+@app.route('/open/<filename>', methods=['GET'])
+def rf(filename):
+    for n in [7, 8]:
+        server_url = fs_url+str(n)+"/"+"open/"+filename
+        in_directory = requests.get(server_url)
+        print(in_directory.text)
+        status_code = in_directory.status_code
+        if status_code == 200:
+            return in_directory.json()
+    return {'Error:': 'no file found.'}
 
 if __name__=='__main__':
     app.run(port=5002)
