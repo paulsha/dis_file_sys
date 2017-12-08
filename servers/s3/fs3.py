@@ -17,7 +17,7 @@ def wf():
         file = open(os.path.join(file_path, filename), "wb+")
         file.write(new_content.encode())
     except:
-        return {'Error:': 'File Not Found.'}, status.HTTP_404_NOT_FOUND
+               return {'File Not Found.'}, status.HTTP_404_NOT_FOUND
     return {'filename': filename, 'message': 'File successfully written.'}
 	
 @app.route('/open/<filename>', methods=['GET'])
@@ -26,7 +26,7 @@ def rf(filename):
         file = open(os.path.join(file_path, filename))
         content = file.read()
     except:
-        return {'Error:': 'File Not Found.'}, status.HTTP_404_NOT_FOUND
+        return {'File Not Found.'}, status.HTTP_404_NOT_FOUND
     return {'filename': filename, 'file_content': content, 'server_port': '5008'}
 	
 @app.route('/find/<filename>', methods=['GET'])
@@ -34,8 +34,7 @@ def of(filename):
     try:
         open(os.path.join(file_path, filename))
     except:
-        return {'Error:': 'File Not Found.'}, status.HTTP_404_NOT_FOUND
+        return {'File Not Found.'}, status.HTTP_404_NOT_FOUND
     return {'Server: ': SERVER_NAME,'file_path': '/'+file_path}
-
 if __name__=='__main__':
     app.run(port=5009)
