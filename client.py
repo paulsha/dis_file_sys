@@ -14,7 +14,7 @@ import base64, json, requests, sys
 #
 #List of Available Commands
 #
-commands = "SEARCH <filename> \n OPEN <filename> \n CLOSE <filename> \n READ <filename> \n WRITE <filename> <new content> \
+commands = "\nSEARCH <filename> \n LOCK <filename> \n UNLOCK <filename> \n READ <filename> \n WRITE <filename> <new content> \
            \n CHECK <filename> \n ADD <filename> <file server> \n LIST \n HELP \n QUIT"
 
 sec_serv_url = 'http://127.0.0.1:5001/'
@@ -69,12 +69,12 @@ def main():
             read_file = requests.get(dir_serv_url+"get_directory/"+filename)
             print(read_file.text)
 
-        elif "OPEN" in cmd:
+        elif "LOCK" in cmd:
             filename = cmd.split()[1]
             opened_files, msg = open(opened_files, filename, user_ID, dec_dir_token)
             print(msg)
 
-        elif "CLOSE" in cmd:
+        elif "UNLOCK" in cmd:
             filename = cmd.split()[1]
             opened_files, msg = close(opened_files, filename, dec_lock_token)
             print(msg)
@@ -136,7 +136,7 @@ def open(opened_files, filename, user_ID, token):
     if open_file.status_code != 200:
         return opened_files, open_file.text.strip('{}')
     opened_files.append(open_file.json())
-    return opened_files, 'File successfully opened.'
+    return opened_files, 'File successfully locked.'
 #	
 #Close File	
 #
@@ -147,7 +147,7 @@ def close(opened_files, filename, token):
             close_json = {'file': ss.encrypt(json.dumps(file), sessKey), 'ticket': token['ticket']}
             close = requests.post(locking_serv_url+"unlock", json=close_json)
             opened_files.remove(file)
-            return opened_files, "File successfully closed."
+            return opened_files, "File successfully unlocked."
     return opened_files, "Error: No file of such name is opened."
 #	
 #Add File	
