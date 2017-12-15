@@ -20,7 +20,7 @@ These features are:
 7. File Server
 
 ### System Requirements
-```
+
 * Python must be installed and available in the termianl using 'python'. The file system was built using Python 3.6.3 in a Windows environment.
 * Once Python is installed, the following packages are also required: flask_api, requests.
 ```
